@@ -109,12 +109,6 @@ export default function TestView() {
         </Link>
         <nav className="ml-auto flex items-center gap-1 text-sm">
           <Link
-            href="/test"
-            className="rounded px-2 py-1 text-secondary transition-colors hover:text-primary"
-          >
-            test
-          </Link>
-          <Link
             href="/settings"
             className="rounded px-2 py-1 text-secondary transition-colors hover:text-primary"
           >
