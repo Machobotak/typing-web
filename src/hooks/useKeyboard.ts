@@ -100,16 +100,21 @@ export interface UseKeyboardResult {
   release: (id: string) => void;
   hintId: string | null;
   setHintId: (id: string | null) => void;
+  capsLock: boolean;
 }
 
 /**
  * Track pressed key ids in state (transitions only happen on key
  * events, never per animation frame). Also subscribes to window
  * keydown/keyup so releases are never missed, and clears on blur.
+ * CapsLock is a toggle, not a held key, so its on/off state is read
+ * from the OS via `getModifierState` and kept separately from
+ * `pressedIds` (which only lives as long as the key is held).
  */
 export function useKeyboard(): UseKeyboardResult {
   const [pressedIds, setPressedIds] = useState<string[]>([]);
   const [hintId, setHintId] = useState<string | null>(null);
+  const [capsLock, setCapsLock] = useState(false);
 
   const press = useCallback((id: string) => {
     setPressedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
@@ -123,10 +128,12 @@ export function useKeyboard(): UseKeyboardResult {
     const onKeyDown = (e: KeyboardEvent) => {
       const id = codeToId(e.code);
       if (id !== null) press(id);
+      setCapsLock(e.getModifierState('CapsLock'));
     };
     const onKeyUp = (e: KeyboardEvent) => {
       const id = codeToId(e.code);
       if (id !== null) release(id);
+      setCapsLock(e.getModifierState('CapsLock'));
     };
     const onBlur = () => {
       setPressedIds((prev) => (prev.length === 0 ? prev : []));
@@ -141,5 +148,5 @@ export function useKeyboard(): UseKeyboardResult {
     };
   }, [press, release]);
 
-  return { pressedIds, press, release, hintId, setHintId };
+  return { pressedIds, press, release, hintId, setHintId, capsLock };
 }

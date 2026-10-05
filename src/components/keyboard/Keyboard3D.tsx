@@ -11,6 +11,7 @@ export interface Keyboard3DProps {
   pressedIds: string[];
   hintId?: string | null;
   errorId?: string | null;
+  capsLock?: boolean;
   force2d?: boolean;
 }
 
@@ -167,6 +168,7 @@ export function Keyboard3D({
   pressedIds,
   hintId = null,
   errorId = null,
+  capsLock = false,
   force2d = false,
 }: Keyboard3DProps) {
   const [webgl2] = useState<boolean>(() => hasWebGL2());
@@ -192,6 +194,7 @@ export function Keyboard3D({
               const isPressed = pressed.has(key.id);
               const isHint = hintId === key.id;
               const isError = errorId === key.id;
+              const isLit = capsLock && key.id === 'CAPS';
               return (
                 <button
                   key={key.id}
@@ -208,7 +211,7 @@ export function Keyboard3D({
                     'h-9 min-w-0 rounded-md border font-mono text-xs font-medium transition-transform duration-75',
                     isError
                       ? 'border-[#FF4D4D] bg-[#FF4D4D]/20 text-[#FF4D4D]'
-                      : isPressed || isHint
+                      : isPressed || isHint || isLit
                         ? 'border-white bg-white/15 text-white'
                         : key.dim
                           ? 'border-white/10 bg-white/5 text-[#555555]'
@@ -245,6 +248,7 @@ export function Keyboard3D({
             w={key.w ?? 0.9}
             pressed={pressed.has(key.id)}
             hint={hintId === key.id}
+            lit={capsLock && key.id === 'CAPS'}
             errorFlash={errorId === key.id}
             dim={key.dim ?? false}
           />

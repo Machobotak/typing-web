@@ -246,11 +246,11 @@ function TestSession({ settings }: { settings: AppSettings }) {
         <Keyboard3D
           pressedIds={kb.pressedIds}
           hintId={kb.hintId}
+          capsLock={kb.capsLock}
           errorId={errorId}
           force2d={force2d}
         />
       </div>
-
       <Modal
         open={typing.status === "finished" && !dismissed}
         title="Result"

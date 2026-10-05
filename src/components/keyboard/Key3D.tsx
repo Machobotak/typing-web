@@ -13,6 +13,7 @@ export interface Key3DProps {
   w?: number;
   pressed: boolean;
   hint?: boolean;
+  lit?: boolean;
   errorFlash?: boolean;
   dim?: boolean;
 }
@@ -48,6 +49,7 @@ export function Key3D({
   w = 0.9,
   pressed,
   hint = false,
+  lit = false,
   errorFlash = false,
   dim = false,
 }: Key3DProps) {
@@ -113,6 +115,9 @@ export function Key3D({
       } else if (isPressed || hint) {
         mat.emissive.copy(ACCENT);
         mat.emissiveIntensity = isPressed ? 0.9 : 0.55;
+      } else if (lit) {
+        mat.emissive.copy(ACCENT);
+        mat.emissiveIntensity = 0.8;
       } else {
         mat.emissiveIntensity = 0;
       }
